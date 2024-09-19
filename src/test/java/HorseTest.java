@@ -8,41 +8,61 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class HorseTest {
 
-    @Mock
-    Horse horse;
+//    @Mock
+//    Horse horse;
 
     @Test
-    void getNameIfItsNull() { // Получить имя, если оно null
+    void constructorPassNameEqualToNull() {
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> new Horse(null, 3)
+                () -> new Horse(null, 3, 0)
         );
-
-        String expectedMessage = "Name cannot be null.";
-        String actualMessage = exception.getMessage();
-
-        assertEquals(expectedMessage, actualMessage);
+        assertEquals("Name cannot be null.", exception.getMessage());
     }
 
     @ParameterizedTest
     @ValueSource(strings = {"", " ", "\n", "\t"})
-    void getNameIfItsEmpty(String name) { // получить имя, если оно пустое
+    void constructorWePassAnEmptyName(String name) {
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> new Horse(name, 2.5)
+                () -> new Horse(name, 3, 0)
         );
-
-        String expectedMessage = "Name cannot be blank.";
-        String actualMessage = exception.getMessage();
-        assertEquals(expectedMessage, actualMessage);
+        assertEquals("Name cannot be blank.", exception.getMessage());
     }
 
+    @Test
+    void constructorWePassNegativeSpeed() {
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> new Horse("name", -1, 0)
+        );
+        assertEquals("Speed cannot be negative.", exception.getMessage());
+    }
+
+    @Test
+    void constructorWePassNegativeDistance() {
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> new Horse("name", 3, -1)
+        );
+        assertEquals("Distance cannot be negative.", exception.getMessage());
+    }
+
+    @Test
+    void getName() {
+        String expectedName = "Pegasus";
+        Horse horse = new Horse(expectedName, 3, 1);
+        assertEquals(expectedName, horse.getName());
+    }
 
     @Test
     void getSpeed() {
+        double expectedSpeed = 3;
+        Horse horse = new Horse("Horse", expectedSpeed);
+        assertEquals(expectedSpeed, horse.getSpeed());
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void getDistance() {
     }
 
