@@ -1,15 +1,13 @@
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class HorseTest {
-
-//    @Mock
-//    Horse horse;
 
     @Test
     void constructorPassNameEqualToNull() {
@@ -58,19 +56,39 @@ class HorseTest {
     @Test
     void getSpeed() {
         double expectedSpeed = 3;
-        Horse horse = new Horse("Horse", expectedSpeed);
+        Horse horse = new Horse("Pegasus", expectedSpeed);
         assertEquals(expectedSpeed, horse.getSpeed());
     }
 
     @Test
-    void getDistance() {
+    void getDistanceConstructorWithThreeParameters() {
+        double expectedDistance = 3;
+        Horse horse = new Horse("Pegasus", 2, expectedDistance);
+        assertEquals(expectedDistance, horse.getDistance());
     }
 
     @Test
-    void move() {
+    void getDistanceConstructorWithTwoParameters() {
+        Horse horse = new Horse("Pegasus", 2);
+        assertEquals(0, horse.getDistance());
     }
 
-    @Test
-    void getRandomDouble() {
+    @ParameterizedTest
+    @ValueSource(doubles = {0.2, 0.3, 0.4, 0.5})
+    void move(double randomDouble) {
+        try (MockedStatic<Horse> utilities =  Mockito.mockStatic(Horse.class)) {
+
+            //добавляем правило
+            utilities.when(() -> Horse.getRandomDouble(0.2d, 0.9d)).thenReturn(randomDouble);
+
+            Horse horse = new Horse("Pegasus", 2, 3);
+            double dist = horse.getDistance();
+            horse.move();
+
+            utilities.verify(() -> Horse.getRandomDouble(0.2d, 0.9d));
+
+            //проверяем, что правило работает
+            assertEquals(dist + horse.getSpeed()*randomDouble, horse.getDistance());
+        }
     }
 }
