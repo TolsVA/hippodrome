@@ -1,12 +1,15 @@
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@ExtendWith(MockitoExtension.class)
 class HorseTest {
 
     @Test
@@ -78,7 +81,6 @@ class HorseTest {
     void move(double randomDouble) {
         try (MockedStatic<Horse> utilities =  Mockito.mockStatic(Horse.class)) {
 
-            //добавляем правило
             utilities.when(() -> Horse.getRandomDouble(0.2d, 0.9d)).thenReturn(randomDouble);
 
             Horse horse = new Horse("Pegasus", 2, 3);
@@ -87,7 +89,6 @@ class HorseTest {
 
             utilities.verify(() -> Horse.getRandomDouble(0.2d, 0.9d));
 
-            //проверяем, что правило работает
             assertEquals(dist + horse.getSpeed()*randomDouble, horse.getDistance());
         }
     }
