@@ -1,3 +1,5 @@
+import com.javarash.hippodrome.Hippodrome;
+import com.javarash.hippodrome.Horse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -31,7 +33,6 @@ class HippodromeTest {
         );
     }
 
-
     @Test
     void getHorses() {
         List<Horse> horses = new ArrayList<>();
@@ -52,7 +53,6 @@ class HippodromeTest {
         for (Horse horse : horses){
             Mockito.verify(horse).move();
         }
-
     }
 
     @Test

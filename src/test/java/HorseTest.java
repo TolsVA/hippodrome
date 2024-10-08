@@ -1,3 +1,4 @@
+import com.javarash.hippodrome.Horse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
